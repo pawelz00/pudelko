@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pudelko", "pudelko\pudelko.csproj", "{40FC8260-F71C-47D4-BE11-1898CF7B95E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pudelkoTests", "pudelkoTests\pudelkoTests.csproj", "{6585315A-8D55-4B4B-95E7-C8B668C779EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40FC8260-F71C-47D4-BE11-1898CF7B95E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40FC8260-F71C-47D4-BE11-1898CF7B95E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40FC8260-F71C-47D4-BE11-1898CF7B95E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40FC8260-F71C-47D4-BE11-1898CF7B95E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6585315A-8D55-4B4B-95E7-C8B668C779EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6585315A-8D55-4B4B-95E7-C8B668C779EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6585315A-8D55-4B4B-95E7-C8B668C779EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6585315A-8D55-4B4B-95E7-C8B668C779EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8F102B5-5D05-462A-8900-A03E16DA1694}
+	EndGlobalSection
+EndGlobal
