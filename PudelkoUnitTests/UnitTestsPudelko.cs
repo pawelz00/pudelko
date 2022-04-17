@@ -550,7 +550,7 @@ namespace PudelkoUnitTests
 
             Pudelko addp1p2 = p1 + p2;
 
-            Assert.AreEqual(addp1p2, pudelko);
+            Assert.AreEqual(addp1p2, expected);
         }
         #endregion
 
