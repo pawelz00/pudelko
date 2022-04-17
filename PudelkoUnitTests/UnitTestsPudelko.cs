@@ -23,7 +23,7 @@ namespace PudelkoUnitTests
     // ========================================
 
     [TestClass]
-    public class UnitTestsPudelkoConstructors
+    public class UnitTestsPudelko
     {
         private static double defaultSize = 0.1; // w metrach
         private static double accuracy = 0.001; //dok³adnoœæ 3 miejsca po przecinku
@@ -448,16 +448,110 @@ namespace PudelkoUnitTests
 
 
         #region Pole, Objêtoœæ ===================================
-        // ToDo
+        [TestMethod]
+        public void Objetosc_Test()
+        {
+            double expected = 60;
 
+            var p1 = new Pudelko(3, 4, 5);
+            var p2 = new Pudelko(300, 400, 500, UnitOfMeasure.centimeter);
+            var p3 = new Pudelko(5, 3, 4);
+            var p4 = new Pudelko(3000.55, 4000.234, 5000.99, UnitOfMeasure.milimeter);
+
+            double p1Obj = p1.Objetosc;
+            double p2Obj = p2.Objetosc;
+            double p3Obj = p3.Objetosc;
+            double p4Obj = p4.Objetosc;
+
+            Assert.AreEqual(expected, p1Obj);
+            Assert.AreEqual(expected, p2Obj);
+            Assert.AreEqual(expected, p3Obj);
+            Assert.AreEqual(expected, p4Obj);
+        }
+
+        [TestMethod]
+        public void Pole_Test()
+        {
+            double expected = 22;
+
+            var p1 = new Pudelko(1,2,3);
+            var p2 = new Pudelko(100,200,300, UnitOfMeasure.centimeter);
+            var p3 = new Pudelko(2,3,1);
+            var p4 = new Pudelko(3000, 1000, 2000, UnitOfMeasure.milimeter);
+
+            double p1Pole = p1.Pole;
+            double p2Pole = p2.Pole;
+            double p3Pole = p3.Pole;
+            double p4Pole = p4.Pole;
+
+            Assert.AreEqual(expected, p1Pole);
+            Assert.AreEqual(expected, p2Pole);
+            Assert.AreEqual(expected, p3Pole);
+            Assert.AreEqual(expected, p4Pole);
+        }
         #endregion
 
         #region Equals ===========================================
-        // ToDo
+        [TestMethod]
+        public void Equals_Test()
+        {
+            var p1 = new Pudelko(1, 2.1, 3.05);
+            var p2 = new Pudelko(1, 3.05, 2.1);
+            var p3 = new Pudelko(2.1, 1, 3.05);
+            var p4 = new Pudelko(2100, 1000, 3050, unit: UnitOfMeasure.milimeter);
+
+            Assert.IsTrue(p1.Equals(p2));
+            Assert.IsTrue(p1.Equals(p3));
+            Assert.IsTrue(p1.Equals(p4));
+        }
         #endregion
 
         #region Operators overloading ===========================
-        // ToDo
+        [TestMethod]
+        public void Test_Equal_Operator()
+        {
+            var p1 = new Pudelko(1, 2, 3);
+            var p2 = new Pudelko(3, 2, 1);
+            var p3 = new Pudelko(300, 200, 100, UnitOfMeasure.centimeter);
+
+            bool result = p1 == p2;
+            bool result2 = p2 == p3;
+            bool result3 = p1 == p3;
+
+            Assert.IsTrue(result);
+            Assert.IsTrue(result2);
+            Assert.IsTrue(result3);
+        }
+
+        [TestMethod]
+        public void Test_NotEqual_Operator()
+        {
+            var p1 = new Pudelko(1, 2, 3);
+            var p2 = new Pudelko(3, 2, 1);
+            var p3 = new Pudelko(300, 200, 100, UnitOfMeasure.centimeter);
+
+            bool result = p1 != p2;
+            bool result2 = p2 != p3;
+            bool result3 = p1 != p3;
+
+            Assert.IsFalse(result);
+            Assert.IsFalse(result2);
+            Assert.IsFalse(result3);
+        }
+
+        [TestMethod]
+        public void Test_Add_Operator()
+        {
+            var pudelko = new Pudelko(6, 6, 6);
+            var expected = pudelko;
+
+            var p1 = new Pudelko(3, 3, 3);
+            var p2 = new Pudelko(3000, 3000, 3000, UnitOfMeasure.milimeter);
+
+            Pudelko addp1p2 = p1 + p2;
+
+            Assert.AreEqual(addp1p2, pudelko);
+        }
         #endregion
 
         #region Conversions =====================================

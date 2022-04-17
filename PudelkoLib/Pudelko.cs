@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,9 +8,14 @@ using System.Threading.Tasks;
 
 namespace pudelko
 {
-    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>
+    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>, IEnumerable<double>
     {
-        #region Properties
+        public enum UnitOfMeasure
+        {
+            meter,
+            centimeter,
+            milimeter
+        }
         private readonly double a, b, c;
         public double A 
         {
@@ -24,7 +30,7 @@ namespace pudelko
                 {
                     temporaryNumber = a / 1000;
                 }
-                return GetRoundedProperties(temporaryNumber);
+                return GetRoundedProp(temporaryNumber);
             }
         }
         public double B
@@ -40,7 +46,7 @@ namespace pudelko
                 {
                     temporaryNumber = b / 1000;
                 }
-                return GetRoundedProperties(temporaryNumber);
+                return GetRoundedProp(temporaryNumber);
             }
         }
         public double C
@@ -56,21 +62,19 @@ namespace pudelko
                 {
                     temporaryNumber = c / 1000;
                 }
-                return GetRoundedProperties(temporaryNumber);
+                return GetRoundedProp(temporaryNumber);
             }
         }
         public UnitOfMeasure unit { get; set; }
         public double Objetosc { get => Math.Round(A * B * C, 9); }
         public double Pole { get => Math.Round(2*((A*B)+(A*C)+(B*C)), 6); }
-        #endregion
-        #region Constructor
         public Pudelko(double? a = null, double? b = null, double? c = null, UnitOfMeasure unit = UnitOfMeasure.meter)
         {
             this.unit = unit;
             this.a = a.GetValueOrDefault(GetDefaultValue());
             this.b = b.GetValueOrDefault(GetDefaultValue());
             this.c = c.GetValueOrDefault(GetDefaultValue());
-            if (a < 0 || b < 0 || c < 0)
+            if (a <= MinValue(unit) || b <= MinValue(unit) || c <= MinValue(unit))
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -79,8 +83,12 @@ namespace pudelko
                 throw new ArgumentOutOfRangeException();
             }
         }
-        #endregion
-        #region ToString
+        private double MinValue(UnitOfMeasure u)
+        {
+            if (u == UnitOfMeasure.milimeter) return 1;
+            else if (u == UnitOfMeasure.centimeter) return 0.01;
+            else return 0.001;
+        }
         public override string ToString()
         {
             if (unit == UnitOfMeasure.meter)
@@ -93,22 +101,22 @@ namespace pudelko
         {
             return ToString(format, CultureInfo.InvariantCulture);
         }
-        public string ToString(string? format, IFormatProvider? formatProvider)
+        public string ToString(string format, IFormatProvider formatProvider)
         {
             switch (format)
             {
                 case "cm":
-                    return $"{String.Format(formatProvider,"{0:0.0}", A * 100)} cm \u00D7 {String.Format(formatProvider,"{0:0.0}", B * 100)} cm \u00D7 {String.Format(formatProvider,"{0:0.0}", C * 100)} cm";
+                    return $"{String.Format(formatProvider,"{0:0.0}",100*A)} cm \u00D7 {String.Format(formatProvider,"{0:0.0}",100*B)} cm \u00D7 {String.Format(formatProvider,"{0:0.0}",100*C)} cm";
                 case "mm":
-                    return $"{String.Format(formatProvider,"{0:0}", A * 1000)} mm \u00D7 {String.Format(formatProvider,"{0:0}", B * 1000)} mm \u00D7 {String.Format(formatProvider,"{0:0}", C * 1000)} mm";
+                    return $"{String.Format(formatProvider,"{0:0}",1000*A)} mm \u00D7 {String.Format(formatProvider,"{0:0}",1000*B)} mm \u00D7 {String.Format(formatProvider,"{0:0}",1000*C)} mm";
                 case "m":
+                    return ToString();
+                case null:
                     return ToString();
                 default:
                     throw new FormatException();
             }
         }
-        #endregion
-        #region Metody wyznaczania a,b,c
         private double GetDefaultValue()
         {
             switch (unit)
@@ -122,21 +130,11 @@ namespace pudelko
             }
         }
 
-        public static double GetRoundedProperties(double x)
+        public static double GetRoundedProp(double x)
         {
-           return Math.Round(x, 3);
+           var y = x * 1000; y = (int)y; y /= 1000;
+           return Math.Round(y, 3);
         }
-
-        #endregion
-        #region Enum
-        public enum UnitOfMeasure
-        {
-            meter,
-            centimeter,
-            milimeter
-        }
-        #endregion
-        #region Equals
         public bool Equals(Pudelko? other)
         {
             if(ReferenceEquals(null, other)) return false;
@@ -150,12 +148,49 @@ namespace pudelko
         {
             return HashCode.Combine(A, B, C);
         }
-        #endregion
         public static bool operator ==(Pudelko p1, Pudelko p2) => p1.Equals(p2);
         public static bool operator !=(Pudelko p1, Pudelko p2) => !p1.Equals(p2);
         public static Pudelko operator +(Pudelko p1, Pudelko p2)
         {
+            var p1arr = (double[])p1;
+            var p2arr = (double[])p2;
+            Array.Sort(p1arr);
+            Array.Sort(p2arr);
+            return new Pudelko(p1arr[0]+ p2arr[0], p1arr[1]+ p2arr[1], p1arr[2]+ p2arr[2]);
+        }
+        public static explicit operator double[](Pudelko p)
+        {
+            double[] result = new double[3];
+            result[0] = p.A; result[1] = p.B; result[2] = p.C;
+            return result;
+        }
+        public static implicit operator Pudelko(ValueTuple<int,int,int> v) => new Pudelko(v.Item1, v.Item2, v.Item3, UnitOfMeasure.milimeter);
+        public IEnumerator<double> GetEnumerator()
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                yield return this[i];
+            }
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
+        public int CompareTo(Pudelko? other)
+        {
+            throw new NotImplementedException();
+        }
+        private double[] array = new double[3];
+        public double this[int index] 
+        {
+            get
+            {
+                if (index < 0 || index >= array.Length) throw new ArgumentOutOfRangeException("index");
+                if (index == 0) return this.A;
+                else if (index == 1) return this.B;
+                else return this.C;
+            }
         }
     }
 }
